@@ -12,7 +12,7 @@ stages:
       commands:
       - rm -rf /oem/userdata
     - &datasource
-      if: '[ ! -e /oem/95_userdata ] && ([ ! -f /run/cos/uki_boot_mode ] || grep -q "kairos.pull_datasources" /proc/cmdline )'
+      if: '[ ! -e /oem/95_userdata ] && [ ! -f /run/cos/live_mode ] && [ ! -f /run/cos/uki_install_mode ] && ([ ! -f /run/cos/uki_boot_mode ] || grep -q "kairos.pull_datasources" /proc/cmdline )'
       name: "Pull data from provider"
       datasource:
         providers: ["cdrom", "gcp", "openstack", "aws", "azure", "hetzner", "packet", "vultr", "digitalocean", "metaldata", "vmware", "config-drive"]

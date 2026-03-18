@@ -106,9 +106,15 @@ stages:
           group: 0
           content: |
             export SYSTEMD_SYSEXT_HIERARCHIES="/usr/local/bin:/usr/local/sbin:/usr/local/include:/usr/local/lib:/usr/local/share:/usr/local/src:/usr/bin:/usr/share:/usr/lib:/usr/include:/usr/src:/usr/sbin"
-    - name: "systemd-sysext/confext initramfs settings"
+    - name: "systemd-sysext initramfs settings"
       only_service_manager: "systemd"
       systemctl:
         enable:
           - systemd-sysext
+
+    - name: "systemd-confext initramfs settings"
+      if: 'test -f /usr/lib/systemd/system/systemd-confext.service || test -f /lib/systemd/system/systemd-confext.service || test -f /usr/lib/systemd/systemd-confext || test -f /usr/bin/systemd-confext'
+      only_service_manager: "systemd"
+      systemctl:
+        enable:
           - systemd-confext

@@ -20,12 +20,17 @@ stages:
         enable:
           - multi-user.target
           - getty@tty1
-          - iscsid
           - logrotate.timer
         mask:
           - purge-kernels
       commands:
         - systemctl set-default multi-user.target
+    - name: "Enable iscsid when available"
+      only_service_manager: "systemd"
+      if: '[ -f /usr/lib/systemd/system/iscsid.service ] || [ -f /lib/systemd/system/iscsid.service ]'
+      systemctl:
+        enable:
+          - iscsid
     - name: "Create systemd services"
       only_service_manager: "systemd"
       files:
