@@ -104,6 +104,13 @@ func GetInstallStage(sis values.System, logger logger.KairosLogger) ([]schema.St
 			},
 		},
 		{
+			Name:     "Install Oracle EPEL repository",
+			OnlyIfOs: "Oracle.*",
+			Commands: []string{
+				fmt.Sprintf("dnf install -y oracle-epel-release-el%d", fullVersion.Segments()[0]),
+			},
+		},
+		{
 			Name:     "Cleanup SLE Micro Rancher bundled kernels",
 			OnlyIfOs: values.OnlyMicroRegex, // Container comes with a kernel already, remove it first
 			Packages: schema.Packages{
