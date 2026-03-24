@@ -54,6 +54,13 @@ func TestDetectFromReleaseIDs(t *testing.T) {
 		{name: "ID_LIKE opensuse-leap suse", id: "custom", idLike: "opensuse-leap suse", expectedDistro: values.OpenSUSELeap, expectedFamily: values.SUSEFamily},
 		{name: "ID_LIKE opensuse suse (family fallback)", id: "custom", idLike: "opensuse suse", expectedDistro: values.OpenSUSELeap, expectedFamily: values.SUSEFamily},
 
+		// Fedora regression: real Fedora 43 os-release values (ID=fedora, no ID_LIKE)
+		{name: "Fedora 43 real os-release", id: "fedora", idLike: "", expectedDistro: values.Fedora, expectedFamily: values.RedHatFamily},
+
+		// Rocky Linux 10 regression: real Rocky 10 os-release values
+		{name: "Rocky Linux 10 real os-release", id: "rocky", idLike: "rhel centos fedora", expectedDistro: values.RockyLinux, expectedFamily: values.RedHatFamily},
+		{name: "Rocky Linux ID precedence over ID_LIKE", id: "rocky", idLike: "fedora", expectedDistro: values.RockyLinux, expectedFamily: values.RedHatFamily},
+
 		// Oracle Linux 10 realistic ID_LIKE fallback combinations
 		{name: "Oracle Linux 10 ID_LIKE fedora", id: "ol", idLike: "fedora", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
 		{name: "Oracle Linux ID_LIKE rhel fedora", id: "ol", idLike: "rhel fedora", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
