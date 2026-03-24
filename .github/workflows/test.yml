@@ -37,6 +37,7 @@ jobs:
          - "almalinux:10"
          - "quay.io/centos/centos:stream9"
          - "quay.io/centos/centos:stream10"
+         - "oraclelinux:10"
          - "ghcr.io/kairos-io/hadron:v0.0.1-beta6"
          - "ghcr.io/kairos-io/hadron:main"
          - "registry.suse.com/suse/sle-micro-rancher/5.4:latest"
@@ -98,3 +99,4 @@ jobs:
             FIPS=${{ matrix.fips || false }}
             TRUSTED_BOOT=${{ matrix.trusted_boot || 'false' }}
             MODEL=${{ matrix.model || 'generic' }}
+            VALIDATE=true
