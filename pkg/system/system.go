@@ -112,6 +112,8 @@ func detectFromID(id string) (values.Distro, values.Family) {
 		return values.Hadron, values.HadronFamily
 	case values.SLEMicroRancher:
 		return values.SLEMicroRancher, values.SUSEFamily
+	case values.OracleLinux:
+		return values.OracleLinux, values.RedHatFamily
 	default:
 		return values.Unknown, values.UnknownFamily
 	}

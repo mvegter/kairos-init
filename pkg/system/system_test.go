@@ -29,6 +29,9 @@ func TestDetectFromReleaseIDs(t *testing.T) {
 		{name: "ID hadron", id: "hadron", expectedDistro: values.Hadron, expectedFamily: values.HadronFamily},
 		{name: "ID sle-micro-rancher", id: "sle-micro-rancher", expectedDistro: values.SLEMicroRancher, expectedFamily: values.SUSEFamily},
 
+		// Oracle Linux direct ID matches
+		{name: "ID ol (Oracle Linux)", id: "ol", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
+
 		// ID takes precedence over ID_LIKE
 		{name: "ID precedence over ID_LIKE", id: "ubuntu", idLike: "rhel fedora", expectedDistro: values.Ubuntu, expectedFamily: values.DebianFamily},
 
@@ -50,6 +53,12 @@ func TestDetectFromReleaseIDs(t *testing.T) {
 		{name: "ID_LIKE skips unknown then matches", id: "custom", idLike: "custom rhel", expectedDistro: values.RedHat, expectedFamily: values.RedHatFamily},
 		{name: "ID_LIKE opensuse-leap suse", id: "custom", idLike: "opensuse-leap suse", expectedDistro: values.OpenSUSELeap, expectedFamily: values.SUSEFamily},
 		{name: "ID_LIKE opensuse suse (family fallback)", id: "custom", idLike: "opensuse suse", expectedDistro: values.OpenSUSELeap, expectedFamily: values.SUSEFamily},
+
+		// Oracle Linux 10 realistic ID_LIKE fallback combinations
+		{name: "Oracle Linux 10 ID_LIKE fedora", id: "ol", idLike: "fedora", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
+		{name: "Oracle Linux ID_LIKE rhel fedora", id: "ol", idLike: "rhel fedora", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
+		{name: "unknown ID with ID_LIKE ol", id: "custom", idLike: "ol", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
+		{name: "unknown ID with ID_LIKE ol fedora", id: "custom", idLike: "ol fedora", expectedDistro: values.OracleLinux, expectedFamily: values.RedHatFamily},
 
 		// Fully unknown
 		{name: "unknown ID and ID_LIKE", id: "custom", idLike: "custombase", expectedDistro: values.Unknown, expectedFamily: values.UnknownFamily},
