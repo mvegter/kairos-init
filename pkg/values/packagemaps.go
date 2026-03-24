@@ -627,6 +627,14 @@ var BasePackages = PackageMap{
 			},
 		},
 	},
+	OracleLinux: {
+		ArchCommon: {
+			Common: {
+				"fail2ban", // Basic security tool, available via EPEL
+				"haveged",  // Random number generator, available via EPEL
+			},
+		},
+	},
 }
 
 // GrubPackages is a map of packages to install for each distro and architecture.
