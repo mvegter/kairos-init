@@ -1,0 +1,75 @@
+{
+  "groupId": "ci-and-arm64-deferral",
+  "surface": "cli-docker-validation",
+  "assertions": [
+    {
+      "id": "VAL-ORACLE-CI-001",
+      "status": "pass",
+      "reason": "CI workflow defines oraclelinux:10 in both amd64 and arm64 matrices with VALIDATE=true, and workflow run 23531136378 shows both Oracle tuples executed successfully with validate step completion in each job log.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.github/workflows/test.yml (oraclelinux:10 in both matrices; VALIDATE=true in both jobs)",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/run-23531136378-job-ordering.jsonl",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/job-68495012883-oracle-amd64-validate-lines.txt",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/job-68496382932-oracle-arm64-validate-lines.txt",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T21-47-38-845Z__ci-matrix-oracle10-amd64-arm64-coverage__7e7b523a-b9a4-4e54-b326-763be0fc2438.json"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CI-002",
+      "status": "pass",
+      "reason": "Workflow enforces arm64 job dependency on amd64_validation, and same-run evidence shows Fedora amd64 and Oracle amd64 completed before Oracle arm64 started.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.github/workflows/test.yml (arm64_validation needs: [amd64_validation])",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/run-23531136378-job-ordering.jsonl",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T22-22-23-136Z__validation-ordering-amd64-first-before-arm64__f767bc8d-8baf-49d4-96ad-84485825b9c6.json"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CI-003",
+      "status": "pass",
+      "reason": "Oracle arm64 path is configured as mandatory (no skip/allow-failure/bypass), and arm64 Oracle build+validate completed successfully in CI logs.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.github/workflows/test.yml (oraclelinux:10 present in arm64 matrix; VALIDATE=true)",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T21-47-38-845Z__ci-matrix-oracle10-amd64-arm64-coverage__7e7b523a-b9a4-4e54-b326-763be0fc2438.json",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/job-68496382932-oracle-arm64-validate-lines.txt"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CI-004",
+      "status": "pass",
+      "reason": "Deferral artifact explicitly records arm64 infeasibility probes, prior successful arm64 build+validate proof, and concrete deferred external boot command blocks.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.factory/library/arm64-boot-deferral-evidence.md",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-25T10-43-52-993Z__arm64-build-validate-and-boot-deferral-policy__ea57c33a-12be-49e5-a843-66422c663e84.json"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CROSS-005",
+      "status": "pass",
+      "reason": "Arm64 boot deferral evidence is coupled with successful Oracle arm64 build+validate evidence in the same validation sequence/run context.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.factory/library/arm64-boot-deferral-evidence.md",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/run-23531136378-job-ordering.jsonl",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/evidence/oracle10-ci-and-validation/user-testing/ci-assertions/job-68496382932-oracle-arm64-validate-lines.txt"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CROSS-006",
+      "status": "pass",
+      "reason": "Deferred arm64 instructions include all four required executable groups: infeasibility proof, artifact build, boot execution, and post-boot health checks with concrete commands.",
+      "evidence": [
+        "/home/sandbox/kairos-init/.factory/library/arm64-boot-deferral-evidence.md (sections 3.1, 3.2, 3.3, 3.4)",
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-25T10-43-52-993Z__arm64-build-validate-and-boot-deferral-policy__ea57c33a-12be-49e5-a843-66422c663e84.json"
+      ]
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "toolsUsed": [
+    "Read",
+    "Grep",
+    "LS",
+    "Execute (gh CLI)"
+  ],
+  "summary": "Validated 6/6 assigned assertions for CI matrix/order and arm64 deferral policy: all passed with workflow, handoff, and CI-log evidence."
+}

@@ -2,4 +2,4 @@ fedora_image=kairos-init:fedora43-amd64-boot-20260324222755
 fedora_digest=sha256:eee2b9b41f3d8c3961e7721849a36715560fbbfad160b3beb82aa4d911e204f1
 oracle_image=kairos-init:oracle10-amd64-boot-20260324223401
 oracle_digest=sha256:895085b885ecb7eb11ab37a8dffdf405189296003aeb79704cfb91571eda4aa8
-timestamp=2026-03-24T22:49:53Z
+timestamp=2026-03-25T11:28:03Z

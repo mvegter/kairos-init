@@ -1,0 +1,38 @@
+{
+  "milestone": "oracle10-ci-and-validation",
+  "round": 1,
+  "status": "pass",
+  "assertionsSummary": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "blocked": 0
+  },
+  "passedAssertions": [
+    "VAL-ORACLE-CI-001",
+    "VAL-ORACLE-CI-002",
+    "VAL-ORACLE-CI-003",
+    "VAL-ORACLE-CI-004",
+    "VAL-ORACLE-CROSS-001",
+    "VAL-ORACLE-CROSS-002",
+    "VAL-ORACLE-CROSS-003",
+    "VAL-ORACLE-CROSS-004",
+    "VAL-ORACLE-CROSS-005",
+    "VAL-ORACLE-CROSS-006"
+  ],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "appliedUpdates": [
+    {
+      "target": "user-testing.md",
+      "description": "Created `.factory/library/user-testing.md` with cli-docker-validation surface guidance, concurrency limits, and flow-validator isolation rules.",
+      "source": "setup"
+    },
+    {
+      "target": "amd64 boot evidence artifacts",
+      "description": "Refreshed amd64 serial boot logs, post-login healthcheck captures, and warning comparison result to provide direct flow-validation evidence for CROSS assertions.",
+      "source": "flow-report"
+    }
+  ],
+  "previousRound": null
+}

@@ -1,0 +1,63 @@
+{
+  "groupId": "amd64-boot-and-warning-baseline",
+  "surface": "cli-docker-validation",
+  "assertions": [
+    {
+      "id": "VAL-ORACLE-CROSS-001",
+      "status": "pass",
+      "reason": "Oracle amd64 Auroraboot artifact booted with exit code 0, serial log reaches automatic login/root shell prompt, no kernel panic/emergency markers were found, and post-login `systemctl --failed --no-pager` exited 0 with `0 loaded units listed.`",
+      "evidence": [
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T22-53-24-303Z__amd64-auroraboot-boot-baseline-validation__1bdaf6cd-c4d5-46b8-ab4e-7d71eab3033c.json",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/boot-validation-report.md",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/oracle-serial.log",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/oracle-postlogin-healthcheck.txt"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CROSS-002",
+      "status": "pass",
+      "reason": "Fedora amd64 baseline boot used the same harness and passed: Auroraboot/QEMU command exited 0, serial log reaches automatic login/root shell prompt, no kernel panic/emergency markers were found, and post-login `systemctl --failed --no-pager` exited 0 with `0 loaded units listed.`",
+      "evidence": [
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T22-53-24-303Z__amd64-auroraboot-boot-baseline-validation__1bdaf6cd-c4d5-46b8-ab4e-7d71eab3033c.json",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/boot-validation-report.md",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/fedora-serial.log",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/fedora-postlogin-healthcheck.txt"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CROSS-003",
+      "status": "pass",
+      "reason": "Warning extraction and normalization command exits are 0 for Fedora and Oracle, baseline validation exit is 0, and overall flow exit is 0; per interpretation guidance, raw diff exit 1 is expected when files differ and does not fail the assertion.",
+      "evidence": [
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-25T11-11-34-344Z__boot-evidence-command-quality-fix__e102a342-cb71-4b2b-9ddd-30cf02c4b848.json",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/warning-comparison-result.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/fedora-kernel-warnings.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/oracle-kernel-warnings.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/fedora-warnings-normalized.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/oracle-warnings-normalized.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/warning-class-diff.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/oracle-only-warnings.txt"
+      ]
+    },
+    {
+      "id": "VAL-ORACLE-CROSS-004",
+      "status": "pass",
+      "reason": "Current-run source image digests and ISO checksums are recorded, and Auroraboot+QEMU boot commands reference the same ISO artifact paths/checksums from that run, showing no stale artifact reuse.",
+      "evidence": [
+        "/home/sandbox/.factory/missions/d833085f-a59f-47f7-82d4-eac8ae14791a/handoffs/2026-03-24T22-53-24-303Z__amd64-auroraboot-boot-baseline-validation__1bdaf6cd-c4d5-46b8-ab4e-7d71eab3033c.json",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/postlogin-healthcheck-summary.md",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/image-digests.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/iso-checksums.txt",
+        "/home/sandbox/kairos-init/.factory/evidence/amd64-boot-validation/boot-validation-report.md"
+      ]
+    }
+  ],
+  "frictions": [],
+  "blockers": [],
+  "toolsUsed": [
+    "Read",
+    "LS",
+    "Grep"
+  ],
+  "summary": "Re-validation of VAL-ORACLE-CROSS-001..004 after evidence refresh passed for all four assertions using refreshed serial logs, post-login healthchecks, warning comparison exits (overall 0 with baseline validation 0), and current-run artifact digest/checksum linkage."
+}

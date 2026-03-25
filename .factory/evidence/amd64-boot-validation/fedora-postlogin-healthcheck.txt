@@ -1,21 +1,21 @@
 # Fedora post-login healthcheck evidence
 # Command: systemctl --failed --no-pager
 # Exit code: 0
-# Captured at: 2026-03-24T23:07:03Z
+# Captured at: 2026-03-25T11:39:23Z
 # Serial interaction timeout: 180s
-# Shell prompt wait: 89.5s
+# Shell prompt wait: 89.8s
 #
 # --- SYSTEMCTL --FAILED OUTPUT ---
-]3008;start=72f5c87d-4e1a-4372-85dc-408272c7c436;machineid=0d1947464438468798392017bf65b4a2;user=root;hostname=kairos-0d19;bootid=18ee878d-c3b6-4022-a913-67ece423e86e;pid=00000000000000001417;type=command;cwd=/root\  UNIT LOAD ACTIVE SUB DESCRIPTION
+]3008;start=5f3dbd12-bd50-4ad8-9b80-a136707e537b;machineid=1fce4058092942cc87db4d537fb86452;user=root;hostname=kairos;bootid=fe27c73f-b01c-462e-822a-b17877deb669;pid=00000000000000001404;type=command;cwd=/root\  UNIT LOAD ACTIVE SUB DESCRIPTION
 0 loaded units listed.
 # --- END SYSTEMCTL OUTPUT ---
 #
 # --- FULL RAW SERIAL CAPTURE ---
 systemctl --failed --no-pager
-[?2004l]3008;start=72f5c87d-4e1a-4372-85dc-408272c7c436;machineid=0d1947464438468798392017bf65b4a2;user=root;hostname=kairos-0d19;bootid=18ee878d-c3b6-4022-a913-67ece423e86e;pid=00000000000000001417;type=command;cwd=/root\[4m [0m[4m [0m[4mUNIT[0m[4m [0m[4mLOAD[0m[4m [0m[4mACTIVE[0m[4m [0m[4mSUB[0m[4m [0m[4mDESCRIPTION[0m
+[?2004l]3008;start=5f3dbd12-bd50-4ad8-9b80-a136707e537b;machineid=1fce4058092942cc87db4d537fb86452;user=root;hostname=kairos;bootid=fe27c73f-b01c-462e-822a-b17877deb669;pid=00000000000000001404;type=command;cwd=/root\[4m [0m[4m [0m[4mUNIT[0m[4m [0m[4mLOAD[0m[4m [0m[4mACTIVE[0m[4m [0m[4mSUB[0m[4m [0m[4mDESCRIPTION[0m
 
 0 loaded units listed.
-]3008;end=72f5c87d-4e1a-4372-85dc-408272c7c436;exit=success\]3008;start=da454a34-fc00-48c6-9c23-e24698631b7a;machineid=0d1947464438468798392017bf65b4a2;user=root;hostname=kairos-0d19;bootid=18ee878d-c3b6-4022-a913-67ece423e86e;pid=00000000000000001417;type=shell;cwd=/root\[?2004h[root@kairos-0d19 ~]# echo '===HEALTHCHECK_END===' RC=$?
-[?2004l]3008;start=e5432080-87cd-4f6d-a858-86ea3f1f9949;machineid=0d1947464438468798392017bf65b4a2;user=root;hostname=kairos-0d19;bootid=18ee878d-c3b6-4022-a913-67ece423e86e;pid=00000000000000001417;type=command;cwd=/root\===HEALTHCHECK_END=== RC=0
-]3008;end=e5432080-87cd-4
+]3008;end=5f3dbd12-bd50-4ad8-9b80-a136707e537b;exit=success\]3008;start=57e13ffc-937d-44d5-8724-eb7cac40939d;machineid=1fce4058092942cc87db4d537fb86452;user=root;hostname=kairos;bootid=fe27c73f-b01c-462e-822a-b17877deb669;pid=00000000000000001404;type=shell;cwd=/root\echo '===HEALTHCHECK_END===' RC=$?
+[?2004h[root@kairos ~]# echo '===HEALTHCHECK_END===' RC=$?
+[?2004l]3008;start=3a9a153e-d001-4edf-aeca-56c7eb53b969;machineid=1fce4058092942cc87db4d537fb86452;user=root;hostname=kairos;bootid=fe27c73f-b01c-462e-822a-b17877deb669;pid=00000000000000001404;type=comman
 # --- END RAW CAPTURE ---
