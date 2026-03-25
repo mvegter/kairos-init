@@ -1,0 +1,81 @@
+{
+  "milestone": "oracle10-ci-and-validation",
+  "round": 1,
+  "status": "fail",
+  "validatorsRun": {
+    "test": {
+      "passed": true,
+      "command": "cd \"/home/sandbox/kairos-init\" && go run github.com/onsi/ginkgo/v2/ginkgo run -p -r ./...",
+      "exitCode": 0
+    },
+    "typecheck": {
+      "passed": true,
+      "command": "cd \"/home/sandbox/kairos-init\" && go test ./... -run TestNonExistent -count=0",
+      "exitCode": 0
+    },
+    "lint": {
+      "passed": true,
+      "command": "cd \"/home/sandbox/kairos-init\" && go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8 run --new-from-rev=2d32c75 ./...",
+      "exitCode": 0
+    }
+  },
+  "reviewsSummary": {
+    "total": 8,
+    "passed": 5,
+    "failed": 3,
+    "failedFeatures": [
+      "amd64-auroraboot-boot-baseline-validation",
+      "kernel-install-plan-data-driven-refactor",
+      "arm64-build-validate-and-boot-deferral-policy"
+    ]
+  },
+  "blockingIssues": [
+    {
+      "featureId": "amd64-auroraboot-boot-baseline-validation",
+      "severity": "blocking",
+      "description": "The reviewed feature evidence run did not include explicit post-login `systemctl --failed --no-pager` outputs and recorded a warning class-diff command exit code of 1, so required cross-assertion evidence was not fully satisfied in that feature review."
+    },
+    {
+      "featureId": "kernel-install-plan-data-driven-refactor",
+      "severity": "blocking",
+      "description": "The reviewed feature commit introduced a `gocritic/hugeParam` regression (`GetKernelRepoEnablements` passed `values.System` by value), making that feature review fail at the commit level."
+    },
+    {
+      "featureId": "arm64-build-validate-and-boot-deferral-policy",
+      "severity": "blocking",
+      "description": "Deferred arm64 boot commands are not fully executable as written: post-boot checks rely on a QEMU monitor socket that is never created and no concrete guest-access path is wired for running required health-check commands."
+    }
+  ],
+  "appliedUpdates": [],
+  "suggestedGuidanceUpdates": [
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Update the environment-constraints section to reflect current QEMU availability in this sandbox, since multiple completed validation features successfully executed `/usr/libexec/qemu-kvm` despite the file stating host QEMU binaries are unavailable.",
+      "evidence": "The review for `amd64-boot-postlogin-healthcheck-evidence` references successful QEMU-backed post-login capture while mission guidance still declares QEMU unavailable.",
+      "isSystemic": false
+    },
+    {
+      "target": "skills/validation-worker",
+      "suggestion": "Add explicit deferred arm64 boot command quality checks to require a concrete, executable guest-access mechanism and complete post-boot health-check command path (not commented examples).",
+      "evidence": "The review for `arm64-build-validate-and-boot-deferral-policy` found blocking command-executability gaps in the deferred boot instructions.",
+      "isSystemic": false
+    },
+    {
+      "target": "AGENTS.md",
+      "suggestion": "Clarify startup expectations when `.factory/services.yaml` is absent (e.g., fallback command-discovery flow), because multiple reviewers flagged missing services manifest assumptions.",
+      "evidence": "All eight scrutiny reports independently flagged missing `.factory/services.yaml` as a shared-state friction point.",
+      "isSystemic": true
+    }
+  ],
+  "rejectedObservations": [
+    {
+      "observation": "Missing in-repo `runtime-worker` or `validation-worker` SKILL.md files should be treated as a repository defect.",
+      "reason": "ambiguous: mission runs can rely on built-in/personal skills outside this repository, so absence of in-repo skill docs is not necessarily incorrect state."
+    },
+    {
+      "observation": "Missing `.factory/services.yaml` should always be treated as a blocking defect.",
+      "reason": "rejected: the mission executed successfully without a services manifest by using repository and mission command evidence; this is a guidance/documentation gap rather than a hard blocker."
+    }
+  ],
+  "previousRound": null
+}
