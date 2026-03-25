@@ -138,6 +138,111 @@ func TestOracleKernelPackagesTrustedBootContent(t *testing.T) {
 	}
 }
 
+func TestGetKernelRepoEnablements(t *testing.T) {
+	tests := []struct {
+		name          string
+		system        System
+		expectCount   int
+		expectName    string // if expectCount > 0, check first entry Name
+		expectHasRepo bool   // at least one repo enablement entry
+	}{
+		{
+			name: "Oracle arm64 returns UEK repo enablement",
+			system: System{
+				Distro: OracleLinux,
+				Arch:   ArchARM64,
+			},
+			expectCount:   1,
+			expectName:    "Enable Oracle UEK repository for arm64 kernel",
+			expectHasRepo: true,
+		},
+		{
+			name: "Oracle amd64 returns no repo enablement",
+			system: System{
+				Distro: OracleLinux,
+				Arch:   ArchAMD64,
+			},
+			expectCount:   0,
+			expectHasRepo: false,
+		},
+		{
+			name: "Fedora amd64 returns no repo enablement",
+			system: System{
+				Distro: Fedora,
+				Arch:   ArchAMD64,
+			},
+			expectCount:   0,
+			expectHasRepo: false,
+		},
+		{
+			name: "Rocky amd64 returns no repo enablement",
+			system: System{
+				Distro: RockyLinux,
+				Arch:   ArchAMD64,
+			},
+			expectCount:   0,
+			expectHasRepo: false,
+		},
+		{
+			name: "Ubuntu amd64 returns no repo enablement",
+			system: System{
+				Distro: Ubuntu,
+				Arch:   ArchAMD64,
+			},
+			expectCount:   0,
+			expectHasRepo: false,
+		},
+		{
+			name: "Unknown distro returns no repo enablement",
+			system: System{
+				Distro: Unknown,
+				Arch:   ArchAMD64,
+			},
+			expectCount:   0,
+			expectHasRepo: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := GetKernelRepoEnablements(tt.system)
+			if len(result) != tt.expectCount {
+				t.Errorf("expected %d enablements, got %d", tt.expectCount, len(result))
+			}
+			if tt.expectHasRepo && len(result) > 0 {
+				if result[0].Name != tt.expectName {
+					t.Errorf("expected first enablement name %q, got %q", tt.expectName, result[0].Name)
+				}
+				if len(result[0].Commands) == 0 {
+					t.Error("expected enablement to have commands")
+				}
+				if result[0].OsRegex == "" {
+					t.Error("expected enablement to have OsRegex")
+				}
+			}
+		})
+	}
+}
+
+func TestKernelRepoEnablementsDataIntegrity(t *testing.T) {
+	// Verify all entries in the KernelRepoEnablements map have required fields
+	for distro, archMap := range KernelRepoEnablements {
+		for arch, enablements := range archMap {
+			for i, re := range enablements {
+				if re.Name == "" {
+					t.Errorf("KernelRepoEnablements[%v][%v][%d]: Name must not be empty", distro, arch, i)
+				}
+				if re.OsRegex == "" {
+					t.Errorf("KernelRepoEnablements[%v][%v][%d]: OsRegex must not be empty", distro, arch, i)
+				}
+				if len(re.Commands) == 0 {
+					t.Errorf("KernelRepoEnablements[%v][%v][%d]: Commands must not be empty", distro, arch, i)
+				}
+			}
+		}
+	}
+}
+
 func TestFedoraKernelPackagesUnchanged(t *testing.T) {
 	// Fedora should still use RedHatFamily packages (no distro-specific entries)
 	_, hasFedora := KernelPackages[Fedora]

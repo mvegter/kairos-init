@@ -1029,6 +1029,48 @@ var KernelPackagesModels = ModelPackageMap{
 	},
 }
 
+// KernelRepoEnablement describes a repository that must be enabled before
+// kernel packages can be installed.  The data is consumed generically by
+// the install-kernel stage so that stage orchestration code does not need
+// vendor-specific branching.
+type KernelRepoEnablement struct {
+	// Name is a human-readable label used in the stage output.
+	Name string
+	// OsRegex is the OnlyIfOs regex that gates this stage (matched against PRETTY_NAME).
+	OsRegex string
+	// Commands are the shell commands executed to enable the repository.
+	Commands []string
+}
+
+// KernelRepoEnablements is a data-driven map of pre-kernel-install repository
+// enablement requirements keyed by Distro → Architecture.  Entries are looked
+// up at runtime to produce generic repo-enable stages without embedding
+// distro-specific conditionals in the stage orchestration code.
+var KernelRepoEnablements = map[Distro]map[Architecture][]KernelRepoEnablement{
+	OracleLinux: {
+		ArchARM64: {
+			{
+				Name:    "Enable Oracle UEK repository for arm64 kernel",
+				OsRegex: "Oracle\\sLinux.*",
+				Commands: []string{
+					"dnf config-manager --enable ol10_UEKR8 || true",
+				},
+			},
+		},
+	},
+}
+
+// GetKernelRepoEnablements returns the pre-kernel-install repository enablement
+// entries for the given system.  The caller can iterate the result to build
+// generic yip stages without knowing which distro requires extra repos.
+func GetKernelRepoEnablements(s System) []KernelRepoEnablement {
+	archMap, ok := KernelRepoEnablements[s.Distro]
+	if !ok {
+		return nil
+	}
+	return archMap[s.Arch]
+}
+
 // PackageListToTemplate takes a list of packages and a map of parameters to replace in the package name
 // and returns a list of packages with the parameters replaced.
 func PackageListToTemplate(packages []string, params map[string]string, l logger.KairosLogger) ([]string, error) {
