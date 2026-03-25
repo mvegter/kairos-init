@@ -1,0 +1,33 @@
+{
+  "featureId": "kernel-install-plan-data-driven-refactor",
+  "reviewedAt": "2026-03-25T10:55:38Z",
+  "commitId": "175c97d",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The refactor successfully removed vendor-specific kernel-stage branching and introduced a data-driven resolver with targeted tests, but the feature commit introduced a new lint regression.",
+    "issues": [
+      {
+        "file": "pkg/values/packagemaps.go",
+        "line": 1066,
+        "severity": "blocking",
+        "description": "In commit 175c97d, `GetKernelRepoEnablements` takes `values.System` by value, which triggered the repo's `hugeParam` lint finding (later corrected by commit f6c8aab). The feature commit itself therefore did not remain lint-clean."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "services",
+      "observation": "The project-level services manifest is missing, so workers cannot rely on shared canonical validator command definitions and instead improvise command selection.",
+      "evidence": "Reading `/home/sandbox/kairos-init/.factory/services.yaml` returned ENOENT; handoff.skillFeedback also notes this gap and recommends fallback guidance."
+    },
+    {
+      "area": "skills",
+      "observation": "The declared `runtime-worker` skill content is not present, which makes procedure compliance difficult to verify and encourages fallback to other skills.",
+      "evidence": "`/home/sandbox/kairos-init/.factory/skills/runtime-worker` is empty, and the transcript skeleton shows `mission-worker-base` invocations instead of a concrete runtime-worker procedure file."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Functionally, the kernel install planning refactor is aligned with the expected data-driven design and preserves target behavior, but this specific feature commit introduced a blocking lint regression (`hugeParam`) that required subsequent remediation."
+}

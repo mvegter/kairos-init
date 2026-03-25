@@ -1,0 +1,38 @@
+{
+  "featureId": "amd64-boot-postlogin-healthcheck-evidence",
+  "reviewedAt": "2026-03-25T10:55:41Z",
+  "commitId": "f6f913c",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "The feature intent is met: commit f6f913c adds a scripted post-login capture path, produces Fedora/Oracle evidence artifacts with explicit `systemctl --failed --no-pager` output (both exit code 0, no failed units), and links those results from the main amd64 boot validation report.",
+    "issues": [
+      {
+        "file": ".factory/evidence/amd64-boot-validation/run-postlogin-healthcheck.sh",
+        "line": 339,
+        "severity": "non_blocking",
+        "description": "The summary heredoc hard-codes `Source Docker Image` tags (`kairos-init:fedora43-amd64-boot-20260324222755` and `kairos-init:oracle10-amd64-boot-20260324223401`), which can become stale on reruns and weaken the 'current-run artifact linkage' claim."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Feature metadata requires `skillName: validation-worker`, but the repository skill directory has no reviewable skill document, so procedure compliance cannot be checked against a source-of-truth skill file.",
+      "evidence": "features.json entry for `amd64-boot-postlogin-healthcheck-evidence` sets `skillName` to `validation-worker`; `/home/sandbox/kairos-init/.factory/skills/validation-worker/` is empty (no `SKILL.md`)."
+    },
+    {
+      "area": "knowledge",
+      "observation": "Mission shared-state guidance appears stale about QEMU availability.",
+      "evidence": "Mission AGENTS.md line 36 says host QEMU binaries are unavailable, but this feature transcript and commit f6f913c show successful use of `/usr/libexec/qemu-kvm` for Fedora and Oracle post-login capture."
+    },
+    {
+      "area": "services",
+      "observation": "Expected shared service inventory file is missing from repo-level `.factory` state.",
+      "evidence": "No `.factory/services.yaml` present under `/home/sandbox/kairos-init` (glob `**/services.yaml` returned no matches), while worker transcript includes a lookup for that path."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review PASS for amd64-boot-postlogin-healthcheck-evidence. Implementation satisfies the feature behavior with explicit Fedora/Oracle post-login `systemctl --failed --no-pager` evidence and updated assertion mapping; one non-blocking robustness issue was noted plus shared-state documentation gaps."
+}

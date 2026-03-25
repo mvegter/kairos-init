@@ -1,0 +1,33 @@
+{
+  "featureId": "oracle10-arm64-kernel-package-mapping-fix",
+  "reviewedAt": "2026-03-25T10:56:28Z",
+  "commitId": "3b521f5",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Commit 3b521f5 implements the required Oracle Linux 10 arm64 UEK package mapping and adds a pre-kernel repo-enable stage, while preserving existing Fedora/RHEL-family behavior via distro-specific kernel-package precedence and targeted regression tests.",
+    "issues": [
+      {
+        "file": "pkg/stages/steps_install.go",
+        "line": 269,
+        "severity": "non_blocking",
+        "description": "The UEK repo enable command uses `dnf config-manager --enable ol10_UEKR8 || true`, which suppresses enablement failures. Kernel install will still fail later if the repo is not enabled, but this stage no longer guarantees immediate failure on repo-enable errors."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Feature metadata declares `skillName` as `runtime-worker`, but the expected in-repo procedure file is not present, limiting direct procedure-auditability from repository state.",
+      "evidence": "`features.json` for feature `oracle10-arm64-kernel-package-mapping-fix` sets `skillName` to `runtime-worker`; `/home/sandbox/kairos-init/.factory/skills/runtime-worker` exists but is empty (no `SKILL.md`)."
+    },
+    {
+      "area": "services",
+      "observation": "Repository-level service/command manifest is missing, so canonical mission command discovery is not available from shared state.",
+      "evidence": "Read of `/home/sandbox/kairos-init/.factory/services.yaml` returned ENOENT, and glob search under `/home/sandbox` found no `services.yaml` file."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review complete: the feature behavior is functionally correct for Oracle arm64 UEK kernel resolution and includes good regression coverage; one non-blocking robustness concern was noted around suppressed repo-enable command failures."
+}

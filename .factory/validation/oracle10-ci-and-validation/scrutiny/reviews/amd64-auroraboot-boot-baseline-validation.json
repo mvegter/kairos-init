@@ -1,0 +1,50 @@
+{
+  "featureId": "amd64-auroraboot-boot-baseline-validation",
+  "reviewedAt": "2026-03-25T10:55:20Z",
+  "commitId": "a86e0f6",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The commit provides substantial amd64 boot evidence (fresh image builds, Auroraboot ISO generation, QEMU boots, and warning files), but it does not fully satisfy the feature contract because required post-login `systemctl --failed --no-pager` evidence is missing and the recorded warning-diff command exited non-zero.",
+    "issues": [
+      {
+        "file": ".factory/evidence/amd64-boot-validation/run-boot-validation.sh",
+        "line": 121,
+        "severity": "blocking",
+        "description": "Health checks only validate login prompt and panic/emergency markers. They do not execute/capture `systemctl --failed --no-pager` for Fedora and Oracle, which is explicitly required by feature verification steps and VAL-ORACLE-CROSS-001/002."
+      },
+      {
+        "file": "handoffs/2026-03-24T22-53-24-303Z__amd64-auroraboot-boot-baseline-validation__1bdaf6cd-c4d5-46b8-ab4e-7d71eab3033c.json",
+        "line": 56,
+        "severity": "blocking",
+        "description": "The recorded class-diff command `diff fedora-warnings-normalized.txt oracle-warnings-normalized.txt` returned `exitCode: 1` (line 57). The feature's expected behavior requires warning extraction/normalization/diff commands to succeed with retained exit codes, so VAL-ORACLE-CROSS-003 evidence is not fully met for this run."
+      },
+      {
+        "file": ".factory/evidence/amd64-boot-validation/boot-validation-report.md",
+        "line": 110,
+        "severity": "non_blocking",
+        "description": "Assertion mapping marks VAL-ORACLE-CROSS-001/002 as PASS and states 'no failed units' without including direct `systemctl --failed --no-pager` outputs, which overstates the available evidence."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "The repository-local `validation-worker` skill content is missing, so procedure-level review cannot be audited from source and guidance updates cannot be made in-place.",
+      "evidence": "/home/sandbox/kairos-init/.factory/skills/validation-worker is empty; handoff file line 77 requests skill guidance for post-login health checks via QEMU monitor/guest-agent."
+    },
+    {
+      "area": "services",
+      "observation": "Service inventory documentation is absent, so required runtime dependencies for validation work are not centrally discoverable.",
+      "evidence": "`/home/sandbox/kairos-init/.factory/services.yaml` is missing; transcript skeleton (worker-transcripts.jsonl line 9) shows the worker attempted to read it before using Docker/QEMU tooling."
+    },
+    {
+      "area": "knowledge",
+      "observation": "Execution uncovered an important Auroraboot usage detail (`docker://` local image reference failed; `oci:` worked) that is not captured in shared library docs.",
+      "evidence": "worker-transcripts.jsonl line 9 includes 'The docker:// scheme doesn't work' and later records using `--set container_image=oci:...`; `.factory/library` currently only contains `arm64-boot-deferral-evidence.md`."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Review failed this feature: while boot artifacts and logs were generated for both Fedora and Oracle from current-run images, mandatory post-login `systemctl --failed --no-pager` evidence and fully successful warning-diff command criteria were not satisfied."
+}

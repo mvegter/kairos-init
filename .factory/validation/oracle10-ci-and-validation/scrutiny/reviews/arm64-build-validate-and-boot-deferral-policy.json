@@ -1,0 +1,39 @@
+{
+  "featureId": "arm64-build-validate-and-boot-deferral-policy",
+  "reviewedAt": "2026-03-25T10:55:23Z",
+  "commitId": "e988021",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "fail",
+  "codeReview": {
+    "summary": "The commit correctly records native arm64 CI success and infeasibility probes, but the deferred arm64 post-boot command set is not fully executable as written, so expectedBehavior for complete deferred boot/health-check commands is not fully met.",
+    "issues": [
+      {
+        "file": ".factory/library/arm64-boot-deferral-evidence.md",
+        "line": 189,
+        "severity": "blocking",
+        "description": "Post-boot check uses `socat` against `/tmp/arm64-oracle10-qemu-monitor.sock`, but the boot command never creates this monitor socket (no `-monitor unix:...` in the QEMU invocation), so this health-check command cannot run."
+      },
+      {
+        "file": ".factory/library/arm64-boot-deferral-evidence.md",
+        "line": 151,
+        "severity": "blocking",
+        "description": "The QEMU boot command provides no guest-access channel (no host forwarding/SSH setup and no command-injection mechanism), while required post-boot checks (`systemctl --failed`, `journalctl`) are only provided as commented examples (lines 193, 216, 220). This leaves the deferred post-boot validation block incomplete/non-executable."
+      }
+    ]
+  },
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "Feature metadata requires `validation-worker`, but the skill content is missing from shared state, forcing fallback to `mission-worker-base` during execution.",
+      "evidence": "Feature entry sets `skillName: validation-worker` in mission features.json; `/home/sandbox/kairos-init/.factory/skills/validation-worker` is empty (no `SKILL.md`); transcript skeleton and handoff.skillFeedback note fallback because validation-worker was unavailable."
+    },
+    {
+      "area": "services",
+      "observation": "Mission procedure references `.factory/services.yaml`, but the file is absent, so service/command setup is not documented in shared state.",
+      "evidence": "Read of `/home/sandbox/kairos-init/.factory/services.yaml` returns ENOENT; no `services.yaml`/`services.yml` exists under `/home/sandbox/kairos-init/.factory`."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Reviewed feature arm64-build-validate-and-boot-deferral-policy at commit e988021 and its worker transcript/handoff. Native arm64 CI success and infeasibility proof are documented, but deferred boot health-check commands are not fully executable due to missing monitor/access wiring, so review status is fail."
+}
