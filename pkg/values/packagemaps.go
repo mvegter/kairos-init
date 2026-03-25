@@ -1063,7 +1063,7 @@ var KernelRepoEnablements = map[Distro]map[Architecture][]KernelRepoEnablement{
 // GetKernelRepoEnablements returns the pre-kernel-install repository enablement
 // entries for the given system.  The caller can iterate the result to build
 // generic yip stages without knowing which distro requires extra repos.
-func GetKernelRepoEnablements(s System) []KernelRepoEnablement {
+func GetKernelRepoEnablements(s *System) []KernelRepoEnablement {
 	archMap, ok := KernelRepoEnablements[s.Distro]
 	if !ok {
 		return nil

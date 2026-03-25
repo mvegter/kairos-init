@@ -260,7 +260,7 @@ func GetInstallKernelStage(sis values.System, logger logger.KairosLogger) ([]sch
 	// Enable any distro/arch-specific repositories required before kernel
 	// package installation.  The enablement data is resolved from a
 	// data-driven map so this stage code remains generic.
-	for _, re := range values.GetKernelRepoEnablements(sis) {
+	for _, re := range values.GetKernelRepoEnablements(&sis) {
 		stage = append(stage, schema.Stage{
 			Name:     re.Name,
 			OnlyIfOs: re.OsRegex,
