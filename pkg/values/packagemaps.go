@@ -285,6 +285,22 @@ var KernelPackages = PackageMap{
 			},
 		},
 	},
+	OracleLinux: {
+		ArchAMD64: {
+			Common: {
+				"kernel", // RHCK (Red Hat Compatible Kernel) available on x86_64
+				"kernel-modules",
+				"kernel-modules-extra",
+			},
+		},
+		ArchARM64: {
+			Common: {
+				"kernel-uek",               // UEK meta package (only UEK is available on aarch64)
+				"kernel-uek-modules",       // Common server modules
+				"kernel-uek-modules-extra", // Extra modules for server configurations
+			},
+		},
+	},
 	AlpineFamily: {
 		ArchCommon: {
 			Common: {
@@ -336,6 +352,22 @@ var KernelPackagesTrustedBoot = PackageMap{
 				"kernel",
 				"kernel-modules",
 				"kernel-modules-extra",
+			},
+		},
+	},
+	OracleLinux: {
+		ArchAMD64: {
+			Common: {
+				"kernel",
+				"kernel-modules",
+				"kernel-modules-extra",
+			},
+		},
+		ArchARM64: {
+			Common: {
+				"kernel-uek",
+				"kernel-uek-modules",
+				"kernel-uek-modules-extra",
 			},
 		},
 	},
@@ -1059,6 +1091,18 @@ func GetPackages(s System, l logger.KairosLogger) ([]string, error) {
 	return mergedPkgs, nil
 }
 
+// hasDistroKernelPackages returns true when the given PackageMap has any kernel
+// entries for the distro (either ArchCommon or the target architecture).  When
+// true, callers should skip the family-level fallback to avoid installing
+// conflicting package names (e.g. Oracle arm64 UEK vs generic RHEL kernel).
+func hasDistroKernelPackages(pm PackageMap, distro Distro, arch Architecture) bool {
+	archMap, ok := pm[distro]
+	if !ok {
+		return false
+	}
+	return len(archMap[ArchCommon]) > 0 || len(archMap[arch]) > 0
+}
+
 func GetKernelPackages(s System, l logger.KairosLogger) ([]string, error) {
 	// Get the kernel packages for the system
 	var filteredPackages []VersionMap
@@ -1067,9 +1111,15 @@ func GetKernelPackages(s System, l logger.KairosLogger) ([]string, error) {
 		// Kernel packages by model
 		if config.DefaultConfig.Model == Generic.String() {
 			filteredPackages = append(filteredPackages, KernelPackagesTrustedBoot[s.Distro][ArchCommon]) // Common kernel packages to both arches
-			filteredPackages = append(filteredPackages, KernelPackagesTrustedBoot[s.Family][ArchCommon]) // Common kernel packages to both arches by family
 			filteredPackages = append(filteredPackages, KernelPackagesTrustedBoot[s.Distro][s.Arch])     // Specific kernel packages for the arch
-			filteredPackages = append(filteredPackages, KernelPackagesTrustedBoot[s.Family][s.Arch])     // Specific kernel packages for the arch by family
+			// Only add family-level kernel packages when the distro does not define its own.
+			// This prevents conflicting package names (e.g. Oracle arm64 UEK vs generic RHEL kernel names).
+			if !hasDistroKernelPackages(KernelPackagesTrustedBoot, s.Distro, s.Arch) {
+				filteredPackages = append(filteredPackages,
+					KernelPackagesTrustedBoot[s.Family][ArchCommon], // Common kernel packages to both arches by family
+					KernelPackagesTrustedBoot[s.Family][s.Arch],     // Specific kernel packages for the arch by family
+				)
+			}
 		} else {
 			// Get specific packages for the model
 			// TODO: No support for trusted boot on models yet, so this part is probably useless for now?
@@ -1081,9 +1131,15 @@ func GetKernelPackages(s System, l logger.KairosLogger) ([]string, error) {
 	} else {
 		if config.DefaultConfig.Model == Generic.String() {
 			filteredPackages = append(filteredPackages, KernelPackages[s.Distro][ArchCommon]) // Common kernel packages to both arches
-			filteredPackages = append(filteredPackages, KernelPackages[s.Family][ArchCommon]) // Common kernel packages to both arches by family
 			filteredPackages = append(filteredPackages, KernelPackages[s.Distro][s.Arch])     // Specific kernel packages for the arch
-			filteredPackages = append(filteredPackages, KernelPackages[s.Family][s.Arch])     // Specific kernel packages for the arch by family
+			// Only add family-level kernel packages when the distro does not define its own.
+			// This prevents conflicting package names (e.g. Oracle arm64 UEK vs generic RHEL kernel names).
+			if !hasDistroKernelPackages(KernelPackages, s.Distro, s.Arch) {
+				filteredPackages = append(filteredPackages,
+					KernelPackages[s.Family][ArchCommon], // Common kernel packages to both arches by family
+					KernelPackages[s.Family][s.Arch],     // Specific kernel packages for the arch by family
+				)
+			}
 		} else {
 			// Get specific packages for the model
 			filteredPackages = append(filteredPackages, KernelPackagesModels[s.Distro][ArchCommon][Model(config.DefaultConfig.Model)])

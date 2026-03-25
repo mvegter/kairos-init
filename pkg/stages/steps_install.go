@@ -255,16 +255,30 @@ func GetInstallKernelStage(sis values.System, logger logger.KairosLogger) ([]sch
 		return []schema.Stage{}, err
 	}
 
-	stage := []schema.Stage{
-		{
-			Name: "Install kernel packages",
-			Packages: schema.Packages{
-				Install: finalMergedPkgs,
-				Refresh: true,
-				Upgrade: true,
+	stage := []schema.Stage{}
+
+	// Oracle Linux arm64 uses UEK (Unbreakable Enterprise Kernel) which lives in a
+	// separate repository that may not be enabled in the base container image.
+	// Enable the UEK repository before installing kernel packages so the
+	// kernel-uek* packages can be resolved.
+	if sis.Distro == values.OracleLinux && sis.Arch == values.ArchARM64 {
+		stage = append(stage, schema.Stage{
+			Name:     "Enable Oracle UEK repository for arm64 kernel",
+			OnlyIfOs: "Oracle\\sLinux.*",
+			Commands: []string{
+				"dnf config-manager --enable ol10_UEKR8 || true",
 			},
-		},
+		})
 	}
+
+	stage = append(stage, schema.Stage{
+		Name: "Install kernel packages",
+		Packages: schema.Packages{
+			Install: finalMergedPkgs,
+			Refresh: true,
+			Upgrade: true,
+		},
+	})
 
 	return stage, nil
 }
