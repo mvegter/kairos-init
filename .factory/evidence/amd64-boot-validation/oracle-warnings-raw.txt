@@ -1,0 +1,2 @@
+Speculative Return Stack Overflow: WARNING: See https://kernel.org/doc/html/latest/admin-guide/hw-vuln/srso.html for mitigation options.
+Warning: Unmaintained driver is detected: e1000_init_module

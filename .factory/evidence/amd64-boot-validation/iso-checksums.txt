@@ -1,0 +1,2 @@
+2e6a03dbea9258128127d2031ce6bfd18ffcef1214dfc9e10308b2bfb36e410f  /tmp/auroraboot-fedora-iso/kairos-fedora-43-core-amd64-generic-v0.0.1.iso
+794c7eba6422508c6338bd4fe55093ea119c325268e4bfac9b324e83314d25f1  /tmp/auroraboot-oracle-iso/kairos-ol-10.1-core-amd64-generic-v0.0.1.iso

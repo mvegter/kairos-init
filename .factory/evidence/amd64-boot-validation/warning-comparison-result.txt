@@ -1,0 +1,22 @@
+# Warning Comparison Validation Result
+# Generated: 2026-03-25T11:30:00Z (re-evaluated from existing evidence artifacts)
+#
+# Step 5a - Fedora warning extraction: exit code 0
+# Step 5a - Oracle warning extraction: exit code 0
+# Step 5b - Fedora normalization: exit code 0
+# Step 5b - Oracle normalization: exit code 0
+# Step 5c - Raw diff: exit code 1 (1 = files differ, expected for different kernels)
+# Step 5c - Oracle-only count: 3
+# Step 5d - Baseline validation: exit code 0
+#   All 3 Oracle-only warnings match accepted kernel-level patterns:
+#     - "Speculative Return Stack Overflow: WARNING" (CPU vulnerability mitigation, kernel 6.12)
+#     - "Warning: Unmaintained driver is detected: e1000_init_module" (driver deprecation)
+#     - "x86/bugs: return thunk changed" (CPU mitigation change)
+#
+# Overall warning comparison: exit code 0
+# Artifacts preserved:
+#   fedora-warnings-normalized.txt
+#   oracle-warnings-normalized.txt
+#   warning-class-diff.txt (raw diff output)
+#   oracle-only-warnings.txt (Oracle-only lines)
+#   warning-comparison-result.txt (this file)

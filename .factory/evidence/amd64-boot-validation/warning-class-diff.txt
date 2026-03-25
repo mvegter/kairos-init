@@ -1,0 +1,9 @@
+4c4,5
+< RAS: Correctable Errors collector initialized.
+---
+> Speculative Return Stack Overflow: WARNING: See https://kernel.org/doc/html/latest/admin-guide/hw-vuln/srso.html for mitigation options.
+> Warning: Unmaintained driver is detected: e1000_init_module
+9c10
+< systemd: systemd-boot-clear-sysfail.service - Clear SysFail Entry If The Boot Is Successful skipped, unmet condition check ConditionPathExists=/sys/firmware/efi/efivars/LoaderEntrySysFail-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
+---
+> x86/bugs: return thunk changed

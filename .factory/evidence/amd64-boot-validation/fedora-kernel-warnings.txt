@@ -1,0 +1,9 @@
+AMD Zen1 DIV0 bug detected. Disable SMT for full protection.
+Error: Driver 'pcspkr' is already registered, aborting...
+PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+RAS: Correctable Errors collector initialized.
+e1000e 0000:00:02.0 0000:00:02.0 (uninitialized): registered PHC clock
+lpc_ich 0000:00:1f.0: I/O space for GPIO uninitialized
+systemd: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+systemd: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+systemd: systemd-boot-clear-sysfail.service - Clear SysFail Entry If The Boot Is Successful skipped, unmet condition check ConditionPathExists=/sys/firmware/efi/efivars/LoaderEntrySysFail-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f

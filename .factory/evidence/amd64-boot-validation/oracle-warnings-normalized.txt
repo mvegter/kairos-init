@@ -1,0 +1,10 @@
+AMD Zen1 DIV0 bug detected. Disable SMT for full protection.
+Error: Driver 'pcspkr' is already registered, aborting...
+PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+Speculative Return Stack Overflow: WARNING: See https://kernel.org/doc/html/latest/admin-guide/hw-vuln/srso.html for mitigation options.
+Warning: Unmaintained driver is detected: e1000_init_module
+e1000e (uninitialized): registered PHC clock
+lpc_ich f.0: I/O space for GPIO uninitialized
+systemd: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+systemd: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+x86/bugs: return thunk changed
